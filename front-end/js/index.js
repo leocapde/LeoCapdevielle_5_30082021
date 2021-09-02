@@ -13,11 +13,12 @@ function askData(i) {
       ${data[i].name} <br>
       ${data[i].price/100} $ <br>
       <img src="${data[i].imageUrl}"> <br>
-      ${data[i].description} 
+      ${data[i].description} <br>
+      <a href="product.html?id=${data[i]._id}" class="streched-link" >En savoir plus</a>
       `;
     })
     .catch(function(err) {
-      console.log("Erreur description")
+      console.log("Erreur data")
     })
 }
 
@@ -34,13 +35,13 @@ function createProductList() {
       for (let i in data) {
         let newDiv = document.createElement("div");
         newDiv.id = "product_" + [i];
-        newDiv.classList.add("col-12", "col-xl-6", "my-1", "p-3", "border", "border-primary", "rounded", "product");
+        newDiv.classList.add("col-12", "col-xl-6", "my-1", "p-3", "border", "border-primary", "rounded");
         document.querySelector(".product_list").appendChild(newDiv);
         askData(i);
       }
     })
     .catch(function(err) {
-      console.log("Erreur data")
+      console.log("Erreur product list")
     })
 }
 
