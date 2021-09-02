@@ -1,0 +1,25 @@
+{
+  "name": "orinoco-backend",
+  "version": "1.0.0",
+  "description": "This is the back end server for Project 5 of the Junior Web Developer path.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "boostrap": "^2.0.0",
+    "express": "^4.16.4",
+    "uuid": "^3.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leocapde/LeoCapdevielle_5_30082021.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leocapde/LeoCapdevielle_5_30082021/issues"
+  },
+  "homepage": "https://github.com/leocapde/LeoCapdevielle_5_30082021#readme"
+}
