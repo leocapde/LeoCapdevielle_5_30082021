@@ -1,48 +1,58 @@
 // Récupéreation des données
-  
-function askData(i) {
-  fetch("http://localhost:3000/api/teddies")
-    .then(function (res) {
-      if (res.ok) {
-        return res.json();
-      }
-    })
-    .then(function (data) {
-      document.getElementById("product_" + [i]).innerHTML = 
+
+const fetchPromise = fetch("http://localhost:3000/api/teddies");
+
+// Fonction de création des cartes produits
+
+function createProductCard(data) {
+  for (let i in data) {
+
+    // Création d'une carte produit
+
+    let newDiv = document.createElement("div");
+    newDiv.id = "product_" + [i];
+    newDiv.classList.add(
+      "col-12",
+      "col-xl-6",
+      "shadow",
+      "p-3",
+      "mb-3",
+      "bg-white",
+      "rounded"
+    );
+    document.getElementById("product_list").appendChild(newDiv);
+
+    // Ajout du contenu de la carte produit
+
+    document.getElementById("product_" + [i]).innerHTML = 
       `
-      ${data[i].name} <br>
-      ${data[i].price/100} $ <br>
-      <img src="${data[i].imageUrl}"> <br>
-      ${data[i].description} <br>
-      <a href="product.html?id=${data[i]._id}" class="streched-link" >En savoir plus</a>
+      <div class="row">
+        <div class="col-7 card-body">    
+          <h5 class="card-title">${data[i].name}</h5>
+          <p class="card-text text-success">${data[i].price / 100} €</p>
+          <a class="btn btn-light" href="product.html?id=${data[i]._id}" class="streched-link" >En savoir plus</a>
+        </div>
+        <div class="col-5">
+          <img class="card-img-top" src="${data[i].imageUrl}">
+        </div>
+      </div>
       `;
-    })
-    .catch(function(err) {
-      console.log("Erreur data")
-    })
+  }
 }
 
-// Création de la liste des produits
+// Fonction de création de la liste des produits
 
 function createProductList() {
-  fetch("http://localhost:3000/api/teddies")
-    .then(function (res) {
-      if (res.ok) {
-        return res.json();
-      }
+  fetchPromise
+    .then((response) => {
+      return response.json();
     })
-    .then(function(data) {
-      for (let i in data) {
-        let newDiv = document.createElement("div");
-        newDiv.id = "product_" + [i];
-        newDiv.classList.add("col-12", "col-xl-6", "my-1", "p-3", "border", "border-primary", "rounded");
-        document.querySelector(".product_list").appendChild(newDiv);
-        askData(i);
-      }
+    .then((data) => {
+      createProductCard(data);
     })
-    .catch(function(err) {
-      console.log("Erreur product list")
-    })
+    .catch((err) => {
+      console.log("Erreur fonction creatProductList()");
+    });
 }
 
 createProductList();

@@ -1,3 +1,7 @@
+// Récupéreation des données
+
+const fetchPromise = fetch("http://localhost:3000/api/teddies");
+
 // Récupération de l'id
 
 let params = new URL(document.location).searchParams;
@@ -6,27 +10,30 @@ let id = params.get("id");
 // Transformation de l'id récupéré en object
 
 function transformIdInObject(id) {
-  fetch("http://localhost:3000/api/teddies")
-    .then(function (res) {
-      if (res.ok) {
-        return res.json();
-      }
+  fetchPromise
+    .then((response) => {
+      return response.json();
     })
-    .then(function (data) {
+    .then((data) => {
       for (let i in data) {
         if (id == data[i]._id) {
-          document.querySelector(".product_detail").innerHTML = 
-          `
-          ${data[i].name} <br>
-          ${data[i].price / 100} $ <br>
-          <img src="${data[i].imageUrl}"> <br>
-          ${data[i].description}
+          document.querySelector(".product_detail").innerHTML = `
+          <div class="row">
+            <div class="col-8 card-body">    
+             <h5 class="card-title">${data[i].name}</h5>
+             <p class="card-text text-success">${data[i].price / 100} €</p>
+             <p class="card-text">${data[i].description}</p>
+            </div>
+            <div class="col-4">
+             <img class="card-img-top" src="${data[i].imageUrl}">
+            </div>
+         </div>
           `;
         }
       }
     })
-    .catch(function(err) {
-        console.log("Erreur transform")
+    .catch((err) => {
+      console.log("Erreur fonction transformIdInObject()");
     });
 }
 
