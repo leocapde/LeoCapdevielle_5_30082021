@@ -14,11 +14,6 @@ function createProductCard(data) {
     newDiv.classList.add(
       "col-12",
       "col-xl-6",
-      "shadow",
-      "p-3",
-      "mb-3",
-      "bg-white",
-      "rounded"
     );
     document.getElementById("product_list").appendChild(newDiv);
 
@@ -26,14 +21,16 @@ function createProductCard(data) {
 
     document.getElementById("product_" + [i]).innerHTML = 
       `
-      <div class="row">
-        <div class="col-7 card-body">    
-          <h5 class="card-title">${data[i].name}</h5>
-          <p class="card-text text-success">${data[i].price / 100} €</p>
-          <a class="btn btn-light" href="product.html?id=${data[i]._id}" class="streched-link" >En savoir plus</a>
-        </div>
-        <div class="col-5">
-          <img class="card-img-top" src="${data[i].imageUrl}">
+      <div class="card shadow p-3 mb-3 bg-white rounded">
+        <div class="row align-items-center">
+          <div class="col-7 card-body">    
+            <h5 class="card-title">${data[i].name}</h5>
+            <p class="card-text text-success">${data[i].price / 100} €</p>
+            <a class="btn btn-info" href="product.html?id=${data[i]._id}" class="streched-link" >En savoir plus</a>
+          </div>
+          <div class="col-5">
+            <img class="card-img-top" src="${data[i].imageUrl}">
+          </div>
         </div>
       </div>
       `;
