@@ -19,13 +19,18 @@ function createProductCard(data) {
 
     // Ajout du contenu de la carte produit
 
+    const euro = new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2
+    });
     document.getElementById("product_" + [i]).innerHTML = 
       `
       <div class="card shadow p-3 mb-3 bg-white rounded">
         <div class="row align-items-center">
           <div class="col-7 card-body">    
             <h5 class="card-title">${data[i].name}</h5>
-            <p class="card-text text-success">${data[i].price / 100} €</p>
+            <p class="card-text text-success">${euro.format(data[i].price / 100)}</p>
             <a class="btn btn-info" href="product.html?id=${data[i]._id}" class="streched-link" >En savoir plus</a>
           </div>
           <div class="col-5">
