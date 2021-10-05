@@ -65,3 +65,18 @@ function transformIdInObject(id) {
 }
 
 transformIdInObject(id);
+
+// Compteur de clicks du boutton "ajouter au panier"
+
+let addClicks = 0;
+const addButton = document.getElementById("add_product");
+
+addButton.addEventListener('click', function(event) {
+  addClicks += 1;
+})
+
+// Ajout d'un produit sur le LocalStorage
+
+addButton.addEventListener('click', function(event) {
+  localStorage.setItem(id, addClicks);
+});
