@@ -18,13 +18,14 @@ function transformIdInObject(id) {
       for (let i in data) {
         if (id == data[i]._id) {
 
-          // Création du produit détaillé
-
           const euro = new Intl.NumberFormat('fr-FR', {
             style: 'currency',
             currency: 'EUR',
             minimumFractionDigits: 2
           });
+
+          // Création du produit détaillé
+
           document.getElementById("product_detail").innerHTML = `    
           <h5 class="card-title">${data[i].name}</h5>
           <p class="card-text text-success">${euro.format(data[i].price / 100)}</p>
@@ -48,14 +49,46 @@ function transformIdInObject(id) {
           </div>
           `;
 
-          // Ajout des différentes options de personalisation
-
           const customs = data[i].colors;
           for (let custom of customs) {
             document.getElementById("custom").innerHTML += `
             <option value="${custom}">${custom}</option>
             `;
           };
+
+          // Création du choix de la quantité
+
+          document.getElementById("product_quantity").innerHTML = `
+          <div>
+            <h6 class="text-secondary">
+              <label for="quantity">Quantité :</label>
+            </h6>
+            <select id="quantity" name="quantity"></select>
+          </div>
+          `;
+
+          for (let quantity = 1; quantity <= 10; quantity++) {
+            document.getElementById("quantity").innerHTML += `
+            <option value="${quantity}">${quantity}</option>
+            `;
+          };
+
+          // Prix total
+
+          let total_quantity = 1;
+          // document.getElementById("quantity").addEventListener('change', (event) => {
+          //   total_quantity = `${event.target.value}`;
+          //   return total_quantity;
+          // })
+
+          // console.log(total_quantity);
+
+          document.getElementById("product_total").innerHTML = `
+          <div>
+            <h6 class="text-secondary">Prix total :</h6>
+            <p class="text-success font-weight-bold">${euro.format(data[i].price / 100 * total_quantity)}</p>
+          </div>
+          `;
         }
       }
     })
@@ -77,6 +110,7 @@ addButton.addEventListener('click', function(event) {
 
 // Ajout d'un produit sur le LocalStorage
 
-addButton.addEventListener('click', function(event) {
+addButton.addEventListener('click', (event) => {
   localStorage.setItem(id, addClicks);
+  alert("Votre produit a bien été ajouté à votre panier !")
 });
