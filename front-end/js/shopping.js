@@ -2,15 +2,17 @@
 
 const fetchPromise = fetch("http://localhost:3000/api/teddies");
 
-// Vider le panier
+// Convertisseur des prix en €
 
-const trashButton = document.getElementById("trash");
-trashButton.addEventListener('click', function(event) {
-  localStorage.clear();
-  if (confirm("Êtes-vous sur de vouloir vider votre panier ?")) {
-    location.reload();
-  }
+const euro = new Intl.NumberFormat('fr-FR', {
+  style: 'currency',
+  currency: 'EUR',
+  minimumFractionDigits: 2
 });
+
+// Indice de quantité du panier
+
+document.getElementById("shopping_quantity").innerHTML += ` <span class="font-weight-bold ">${localStorage.length}</span>`;
 
 // Création de la liste des produits ajoutés au panier
 
@@ -21,16 +23,13 @@ function createShoppingList() {
     })
     .then((data) => {
       const shoppingList = document.getElementById("shopping_list");
-      const euro = new Intl.NumberFormat('fr-FR', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2
-      });
-      let total_price = 0;
+      let totalShopping = 0;
+      // let productQuantity = 0;
 
       for (let obj of data) {
         for (let key in localStorage) {
           if (obj._id == key) {
+            let productQuantity = localStorage.getItem(obj._id);
 
             // Création de la carte produit
 
@@ -48,11 +47,9 @@ function createShoppingList() {
 
             document.getElementById(`${obj._id}`).innerHTML = 
             `
-            <div class="col-12 col-md-auto mb-3">
-              <h6 class="text-secondary">
-              <label for="quantity">Quantité :</label>
-              </h6>
-              <select id="quantity_${obj._id}" name="quantity"></select>
+            <div class="col-12 col-md-auto mb-3 mb-md-0">
+              <h6 class="mt-3 text-secondary">Quantité :</h6>
+              <p>${productQuantity}</p>
             </div>
             <div class="col-12 col-md-6 card shadow p-3 mb-3 bg-white rounded">
               <div class="row align-items-center">
@@ -67,17 +64,11 @@ function createShoppingList() {
             </div>
             <div class="col-12 col-md-auto">
               <h6 class="mt-3 text-secondary">Prix total :</h6>
-              <p class="text-success font-weight-bold">${euro.format(obj.price / 100)}</p>
+              <p class="text-success font-weight-bold">${euro.format(obj.price / 100 * productQuantity)}</p>
             </div>
             `;
 
-            for (let quantity = 1; quantity <= 10; quantity++) {
-              document.getElementById(`quantity_${obj._id}`).innerHTML += `
-              <option value="${quantity}">${quantity}</option>
-              `;
-            };
-
-            total_price += obj.price;
+            totalShopping += obj.price * productQuantity;
           } 
         }
       }
@@ -94,7 +85,7 @@ function createShoppingList() {
       `
       <div class="row mt-5 justify-content-center h5">
         <p class="col-12 col-md-auto text-secondary">Total du panier :</p>
-        <p class="col-12 col-md-auto text-success font-weight-bold font-size-1.5">${euro.format(total_price / 100)}</p>
+        <p class="col-12 col-md-auto text-success font-weight-bold font-size-1.5">${euro.format(totalShopping / 100)}</p>
       </div>
       `;
     })
@@ -104,3 +95,13 @@ function createShoppingList() {
 }
 
 createShoppingList();
+
+// Vider le panier
+
+const trashButton = document.getElementById("trash");
+trashButton.addEventListener('click', function(event) {
+  localStorage.clear();
+  if (confirm("Êtes-vous sur de vouloir vider votre panier ?")) {
+    location.reload();
+  }
+});

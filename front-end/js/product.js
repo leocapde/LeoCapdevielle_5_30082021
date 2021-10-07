@@ -7,6 +7,18 @@ const fetchPromise = fetch("http://localhost:3000/api/teddies");
 const params = new URL(document.location).searchParams;
 const id = params.get("id");
 
+// Convertisseur des prix en €
+
+const euro = new Intl.NumberFormat('fr-FR', {
+  style: 'currency',
+  currency: 'EUR',
+  minimumFractionDigits: 2
+});
+
+// Indice de quantité du panier
+
+document.getElementById("shopping_quantity").innerHTML += ` <span class="font-weight-bold ">${localStorage.length}</span>`;
+
 // Transformation de l'id récupéré en object
 
 function transformIdInObject(id) {
@@ -17,12 +29,6 @@ function transformIdInObject(id) {
     .then((data) => {
       for (let i in data) {
         if (id == data[i]._id) {
-
-          const euro = new Intl.NumberFormat('fr-FR', {
-            style: 'currency',
-            currency: 'EUR',
-            minimumFractionDigits: 2
-          });
 
           // Création du produit détaillé
 
@@ -39,14 +45,10 @@ function transformIdInObject(id) {
           // Création de la liste de personnalisation
 
           document.getElementById("product_custom").innerHTML = `
-          <div>
             <h6 class="text-secondary">
-              <label for="custom">Personalistion :</label>
+              <label for="custom">Choix de la couleur :</label>
             </h6>
-            <select id="custom" name="custom">
-              <option value="">-- Choisissez la couleur --</option>
-            </select>
-          </div>
+            <select id="custom" name="custom"></select>
           `;
 
           const customs = data[i].colors;
@@ -58,37 +60,11 @@ function transformIdInObject(id) {
 
           // Création du choix de la quantité
 
-          document.getElementById("product_quantity").innerHTML = `
-          <div>
-            <h6 class="text-secondary">
-              <label for="quantity">Quantité :</label>
-            </h6>
-            <select id="quantity" name="quantity"></select>
-          </div>
-          `;
-
           for (let quantity = 1; quantity <= 10; quantity++) {
             document.getElementById("quantity").innerHTML += `
             <option value="${quantity}">${quantity}</option>
             `;
           };
-
-          // Prix total
-
-          let total_quantity = 1;
-          // document.getElementById("quantity").addEventListener('change', (event) => {
-          //   total_quantity = `${event.target.value}`;
-          //   return total_quantity;
-          // })
-
-          // console.log(total_quantity);
-
-          document.getElementById("product_total").innerHTML = `
-          <div>
-            <h6 class="text-secondary">Prix total :</h6>
-            <p class="text-success font-weight-bold">${euro.format(data[i].price / 100 * total_quantity)}</p>
-          </div>
-          `;
         }
       }
     })
@@ -99,18 +75,15 @@ function transformIdInObject(id) {
 
 transformIdInObject(id);
 
-// Compteur de clicks du boutton "ajouter au panier"
-
-let addClicks = 0;
-const addButton = document.getElementById("add_product");
-
-addButton.addEventListener('click', function(event) {
-  addClicks += 1;
-})
-
 // Ajout d'un produit sur le LocalStorage
 
+const addButton = document.getElementById("add_product");
+let getQuantity = document.getElementById("quantity");
 addButton.addEventListener('click', (event) => {
-  localStorage.setItem(id, addClicks);
-  alert("Votre produit a bien été ajouté à votre panier !")
+  localStorage.setItem(id, getQuantity.value);
+  if (getQuantity.value > 1) {
+    alert(`Vos ${getQuantity.value} produits ont bien été ajouté à votre panier !`)
+  } else {
+    alert("Votre produit a bien été ajouté à votre panier !")
+  }
 });

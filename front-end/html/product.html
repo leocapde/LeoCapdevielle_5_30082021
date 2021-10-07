@@ -37,7 +37,7 @@
                             <a href="index.html" class="nav-link">Accueil</a>
                         </li>
                         <li class="nav-item">
-                            <a href="shopping.html" class="nav-link">Panier</a>
+                            <a href="shopping.html" class="nav-link" id="shopping_quantity">Panier</a>
                         </li>
                     </ul>
                 </div>
@@ -48,7 +48,12 @@
             <div class="card col-12 col-md-8  shadow p-3 mb-3 bg-white rounded">
                 <div id="product_detail"></div>
                 <div id="product_custom" class="mt-5"></div>
-                <div id="product_quantity" class="mt-5"></div>
+                <div id="product_quantity" class="mt-5">
+                    <h6 class="text-secondary">
+                        <label for="quantity">Quantité :</label>
+                    </h6>
+                    <select id="quantity" name="quantity"></select>
+                </div>
                 <div id="product_total" class="mt-5"></div>
                 <div id="product_validation" class="mt-5 mb-3 mx-auto">
                     <button id="add_product" type="button" class="px-5 py-3 btn btn-success rounded">Ajouter au

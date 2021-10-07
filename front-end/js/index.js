@@ -2,6 +2,18 @@
 
 const fetchPromise = fetch("http://localhost:3000/api/teddies");
 
+// Convertisseur des prix en €
+
+const euro = new Intl.NumberFormat('fr-FR', {
+  style: 'currency',
+  currency: 'EUR',
+  minimumFractionDigits: 2
+});
+
+// Indice de quantité du panier
+
+document.getElementById("shopping_quantity").innerHTML += ` <span class="font-weight-bold ">${localStorage.length}</span>`;
+
 // Fonction de création des cartes produits
 
 function createProductCard(data) {
@@ -19,11 +31,6 @@ function createProductCard(data) {
 
     // Ajout du contenu de la carte produit
 
-    const euro = new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 2
-    });
     document.getElementById("product_" + [i]).innerHTML = 
       `
       <div class="card shadow p-3 mb-3 bg-white rounded">
