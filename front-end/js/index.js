@@ -1,6 +1,6 @@
 // Récupéreation des données
 
-const fetchPromise = fetch("http://localhost:3000/api/teddies");
+const fetchPromise = "http://localhost:3000/api/teddies";
 
 // Convertisseur des prix en €
 
@@ -12,7 +12,7 @@ const euro = new Intl.NumberFormat('fr-FR', {
 
 // Indice de quantité du panier
 
-document.getElementById("shopping_quantity").innerHTML += ` <span class="font-weight-bold ">${localStorage.length}</span>`;
+document.getElementById("shopping_quantity").innerHTML += ` <span class="fw-bold ">(${localStorage.length})</span>`;
 
 // Fonction de création des cartes produits
 
@@ -38,7 +38,7 @@ function createProductCard(data) {
           <div class="col-7 card-body">    
             <h5 class="card-title">${data[i].name}</h5>
             <p class="card-text text-success">${euro.format(data[i].price / 100)}</p>
-            <a class="btn btn-info" href="product.html?id=${data[i]._id}" class="streched-link" >En savoir plus</a>
+            <a class="btn btn-primary" href="product.html?id=${data[i]._id}" class="streched-link" >En savoir plus</a>
           </div>
           <div class="col-5">
             <img class="card-img-top" src="${data[i].imageUrl}">
@@ -52,7 +52,7 @@ function createProductCard(data) {
 // Fonction de création de la liste des produits
 
 function createProductList() {
-  fetchPromise
+  fetch(fetchPromise)
     .then((response) => {
       return response.json();
     })

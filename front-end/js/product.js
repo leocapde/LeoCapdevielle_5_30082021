@@ -1,6 +1,6 @@
 // Récupéreation des données
 
-const fetchPromise = fetch("http://localhost:3000/api/teddies");
+const fetchPromise = "http://localhost:3000/api/teddies";
 
 // Récupération de l'id
 
@@ -17,12 +17,12 @@ const euro = new Intl.NumberFormat('fr-FR', {
 
 // Indice de quantité du panier
 
-document.getElementById("shopping_quantity").innerHTML += ` <span class="font-weight-bold ">${localStorage.length}</span>`;
+document.getElementById("shopping_quantity").innerHTML += ` <span class="fw-bold ">(${localStorage.length})</span>`;
 
 // Transformation de l'id récupéré en object
 
 function transformIdInObject(id) {
-  fetchPromise
+  fetch(fetchPromise)
     .then((response) => {
       return response.json();
     })
