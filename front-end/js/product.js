@@ -86,4 +86,5 @@ addButton.addEventListener('click', (event) => {
   } else {
     alert("Votre produit a bien été ajouté à votre panier !")
   }
+  location.reload();
 });

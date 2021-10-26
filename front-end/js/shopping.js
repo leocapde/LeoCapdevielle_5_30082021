@@ -87,19 +87,7 @@ function createShoppingList() {
 
             // Ajout du contenu dans l'objet products
 
-            products.push(
-              obj._id
-            //   {
-            //   _id: obj._id,
-            //   name: obj.name,
-            //   price: obj.price,
-            //   imageUrl: obj.imageUrl,
-            //   description: obj.description,
-            //   colors: obj.colors,
-            //   quantity: productQuantity,
-            //   total_price: obj.price * productQuantity
-            // }
-            );
+            products.push(obj._id);
           } 
         }
       }
@@ -179,8 +167,8 @@ validationButton.addEventListener('click', (event) => {
 
       const confirmationButton = document.getElementById("validation_form");
       confirmationButton.addEventListener('submit', (event) => {
-        event.preventDefault(); // Permet de ne pas envoyer le formulaire
-        if (confirm("Êtes-vous sûr de vouloir envoyer le formulaire ?")) {
+        event.preventDefault();
+        if (confirm("Êtes-vous sûr de vouloir valider la commande ?")) {
         createContact();
         sendCommand();
         }
@@ -206,13 +194,9 @@ function sendCommand() {
   })
   .then((data) => {
     // localStorage.clear();
-    // localStorage.setItem("products", products);
-    // localStorage.setItem("contact", contact);
-
-    // renvoyer vers URL/orderId
-    // location.href = "validation.html?id="+data.orderId;
-
-    console.log(data.orderId);
+    localStorage.setItem("contact", JSON.stringify(contact));
+    // localStorage.setItem("products", JSON.stringify(products));
+    location.href = "validation.html?orderId="+data.orderId;
   })
   .catch((err) => {
     console.log("Erreur fonction sendCommand()");

@@ -46,9 +46,30 @@
 
         <div class="container row mx-auto justify-content-center">
             <div class="card col-12 shadow p-3 mb-3 bg-white rounded">
-                <div class="col-12 col-md-6 mx-auto ">
+                <h1 class="text-center text-primary my-3">Félicitation pour votre commande !</h1>
 
+                <div class="my-3">
+                    <h3 class="mb-3">Récapitulatif de votre commande :</h3>
+
+                    <div class="card col-12 shadow p-3 mb-3 bg-white rounded">
+                        <h4 class="text-secondary">Votre numéro de commande :</h4>
+                        <div id="validation_orderId"></div>
+                    </div>
+
+                    <div class="card col-12 shadow p-3 mb-3 bg-white rounded">
+                        <h4 class="text-secondary mb-3">Vos produits :</h4>
+                        <div id="validation_products" class="row"></div>
+                        <p id="totalShopping" class="text-center fw-bold text-success"></p>
+                    </div>
+
+                    <div class="card col-12 shadow p-3 mb-3 bg-white rounded">
+                        <h4 class="text-secondary">Votre addresse de facturation :</h4>
+                        <div id="validation_contact"></div>
+                    </div>
                 </div>
+
+                <p class="text-center fs-italic">Merci d'avoir choisi Orinoco pour vos achats d'oursons en peluche</p>
+                <a class="btn btn-primary text-center mx-auto" href="index.html">Retour à l'accueil</a>
             </div>
         </div>
 
