@@ -1,33 +1,20 @@
-// Récupéreation des données
-
-const fetchPromise = "http://localhost:3000/api/teddies";
-
 // Récupération de l'orderId
 
-const params = new URL(document.location).searchParams;
-const orderId = params.get("orderId");
+const orderId = url.get("orderId");
+
+// Affichage du numéro de commande
 
 document.getElementById("validation_orderId").innerHTML = 
 `
 <p><span class="fw-bold">Numéro de commande :</span> n°${orderId}</p>
 `;
 
-// Convertisseur des prix en €
-
-const euro = new Intl.NumberFormat('fr-FR', {
-  style: 'currency',
-  currency: 'EUR',
-  minimumFractionDigits: 2
-});
-
-// Récupération des informations contact
-
-let contactJSON = localStorage.getItem("contact");
-let contact = contactJSON && JSON.parse(contactJSON);
-
 // Création du récapitulatif de facturation
 
 function createValidationContactList() {
+  let contactJSON = localStorage.getItem("contact");
+  let contact = JSON.parse(contactJSON);
+
   document.getElementById("validation_contact").innerHTML = 
   `
   <p class="mb-1"><span class="fw-bold">Nom :</span> ${contact.lastName}</p>
@@ -59,7 +46,7 @@ function createValidationProductsList() {
           // Création de la carte produit
 
           let newDiv = document.createElement("div");
-          newDiv.id = `${obj._id}`;
+          newDiv.id = obj._id;
           newDiv.classList.add(
             "col-12",
             "col-xl-6",
@@ -78,7 +65,7 @@ function createValidationProductsList() {
                 <p class="text-success">Prix total : ${euro.format(obj.price / 100 * productQuantity)}</p>
               </div>
               <div class="col-5">
-                <img class="card-img-top" src="${obj.imageUrl}">
+                <img class="card-img-top" src="${obj.imageUrl}" alt="${obj.name}">
               </div>
             </div>
           </div>
@@ -88,6 +75,9 @@ function createValidationProductsList() {
         } 
       }
     }
+
+    // Affichage du prix total de la commande
+
     document.getElementById("totalShopping").innerHTML = 
     `
     <div class="row mt-5 justify-content-center h5">

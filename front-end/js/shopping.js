@@ -1,21 +1,4 @@
-// Récupéreation des données
-
-const fetchPromise = "http://localhost:3000/api/teddies";
-const fetchPost = "http://localhost:3000/api/teddies/order";
-
-// Convertisseur des prix en €
-
-const euro = new Intl.NumberFormat('fr-FR', {
-  style: 'currency',
-  currency: 'EUR',
-  minimumFractionDigits: 2
-});
-
-// Indice de quantité du panier
-
-document.getElementById("shopping_quantity").innerHTML += ` <span class="fw-bold ">(${localStorage.length})</span>`;
-
-// Création des objets
+// Création des objets pour la méthode POST
 
 let products = new Array();
 let contact;
@@ -73,24 +56,37 @@ function createShoppingList() {
                   <p class="card-text text-success">${euro.format(obj.price / 100)}</p>
                 </div>
                 <div class="col-5">
-                  <img class="card-img-top" src="${obj.imageUrl}">
+                  <img class="card-img-top" src="${obj.imageUrl}" alt="${obj.name}">
                 </div>
               </div>
             </div>
             <div class="col-12 col-md-auto">
               <h6 class="mt-3 text-secondary">Prix total :</h6>
               <p class="text-success fw-bold">${euro.format(obj.price / 100 * productQuantity)}</p>
+              <button id="trash_${obj._id}" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Retirer du panier"><i class="fas fa-trash-alt"></i></button>
             </div>
             `;
 
             totalShopping += obj.price * productQuantity;
 
-            // Ajout du contenu dans l'objet products
+            // Retirer un  seul produit
+
+            document.getElementById(`trash_${obj._id}`).addEventListener("click", (event) => {
+              if (confirm("Êtes-vous sûr de vouloir retirer ce produit du panier?")) {
+                localStorage.removeItem(`${obj._id}`);
+                location.reload();
+              }
+            })
+
+            // Ajout de l'_id dans l'objet "products"
 
             products.push(obj._id);
           } 
         }
       }
+
+      // Vérification si le panier n'est pas vide 
+      
       if (!shoppingList.hasChildNodes()) {
         shoppingList.innerHTML = 
         `
@@ -98,7 +94,7 @@ function createShoppingList() {
         `;
       }
 
-      // Prix total
+      // Affichage du prix total
 
       document.getElementById("total_shopping").innerHTML = 
       `
@@ -123,6 +119,9 @@ validationButton.addEventListener('click', (event) => {
     alert("Votre panier est vide ...")
   } else {
     if (confirm("Êtes-vous sûr de vouloir passer la commande ?")) {
+
+      // Crétaion du formulaire de commande 
+
       document.getElementById("validation_shopping").innerHTML = 
       `
       <h3 class="my-3">Vos informations personnelles</h3>
@@ -163,7 +162,7 @@ validationButton.addEventListener('click', (event) => {
       </form>
       `;
 
-      // Création de l'objet contact
+      // Création de l'objet contact et envoi de la commande 
 
       const confirmationButton = document.getElementById("validation_form");
       confirmationButton.addEventListener('submit', (event) => {
@@ -177,7 +176,7 @@ validationButton.addEventListener('click', (event) => {
   }
 })
 
-// Envoie de la commande 
+// Création de la méthode POST d'envoi de la commande  
 
 function sendCommand() {
   fetch(fetchPost, {
@@ -193,10 +192,8 @@ function sendCommand() {
     return response.json();
   })
   .then((data) => {
-    // localStorage.clear();
     localStorage.setItem("contact", JSON.stringify(contact));
-    // localStorage.setItem("products", JSON.stringify(products));
-    location.href = "validation.html?orderId="+data.orderId;
+    location.href = `validation.html?orderId=${data.orderId}`;
   })
   .catch((err) => {
     console.log("Erreur fonction sendCommand()");

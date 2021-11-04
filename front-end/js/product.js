@@ -1,44 +1,27 @@
-// Récupéreation des données
-
-const fetchPromise = "http://localhost:3000/api/teddies";
-
 // Récupération de l'id
 
-const params = new URL(document.location).searchParams;
-const id = params.get("id");
+const id = url.get("id");
 
-// Convertisseur des prix en €
+// Création du produit détaillé à partir de l'id récupéré
 
-const euro = new Intl.NumberFormat('fr-FR', {
-  style: 'currency',
-  currency: 'EUR',
-  minimumFractionDigits: 2
-});
-
-// Indice de quantité du panier
-
-document.getElementById("shopping_quantity").innerHTML += ` <span class="fw-bold ">(${localStorage.length})</span>`;
-
-// Transformation de l'id récupéré en object
-
-function transformIdInObject(id) {
+function createDetailedProduct(id) {
   fetch(fetchPromise)
     .then((response) => {
       return response.json();
     })
     .then((data) => {
-      for (let i in data) {
-        if (id == data[i]._id) {
+      for (let obj of data) {
+        if (id == obj._id) {
 
           // Création du produit détaillé
 
           document.getElementById("product_detail").innerHTML = `    
-          <h5 class="card-title">${data[i].name}</h5>
-          <p class="card-text text-success">${euro.format(data[i].price / 100)}</p>
-          <img class="card-img" src="${data[i].imageUrl}">
+          <h5 class="card-title">${obj.name}</h5>
+          <p class="card-text text-success">${euro.format(obj.price / 100)}</p>
+          <img class="card-img" src="${obj.imageUrl}" alt="${obj.name}">
           <div class="mt-3">
             <h6 class="text-secondary">Description :</h6>
-            <p class="card-text">${data[i].description}</p>
+            <p class="card-text">${obj.description}</p>
           </div>
           `;
 
@@ -51,7 +34,7 @@ function transformIdInObject(id) {
             <select id="custom" name="custom"></select>
           `;
 
-          const customs = data[i].colors;
+          const customs = obj.colors;
           for (let custom of customs) {
             document.getElementById("custom").innerHTML += `
             <option value="${custom}">${custom}</option>
@@ -69,22 +52,28 @@ function transformIdInObject(id) {
       }
     })
     .catch((err) => {
-      console.log("Erreur fonction transformIdInObject()");
+      console.log("Erreur fonction createDetailedProduct()");
     });
 }
 
-transformIdInObject(id);
+createDetailedProduct(id);
 
-// Ajout d'un produit sur le LocalStorage
+// Ajout du produit dans le panier (sur le LocalStorage)
 
-const addButton = document.getElementById("add_product");
 let getQuantity = document.getElementById("quantity");
+const addButton = document.getElementById("add_product");
 addButton.addEventListener('click', (event) => {
-  localStorage.setItem(id, getQuantity.value);
-  if (getQuantity.value > 1) {
-    alert(`Vos ${getQuantity.value} produits ont bien été ajouté à votre panier !`)
+  if (localStorage.getItem(id)) {
+    let storageQuantity = localStorage.getItem(id);
+    let totalQuantity = parseInt(storageQuantity, 10) + parseInt(getQuantity.value, 10);
+
+    if (confirm(`Vous avez déjà ce produit en ${storageQuantity} exemplaires dans votre panier. Souhaitez vous ajouter ces ${getQuantity.value} nouveaux examplaires ?`)) {
+      localStorage.setItem(id, totalQuantity);
+      location.href = "shopping.html";
+    } 
   } else {
-    alert("Votre produit a bien été ajouté à votre panier !")
-  }
-  location.reload();
+      alert(`Vos ${getQuantity.value} produits ont bien été ajouté à votre panier !`)
+      localStorage.setItem(id, getQuantity.value);
+      location.href = "shopping.html";
+    }
 });
