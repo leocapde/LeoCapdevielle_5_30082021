@@ -87,8 +87,8 @@ function createValidationProductsList() {
     `;
     localStorage.clear(); // Vide le localStorage après avoir chargé et affiché la page
   })
-  .catch((err) => {
-    console.log("Erreur fonction createValidationProductsList()");
+  .catch((error) => {
+    console.error(error);
   });
 };
 

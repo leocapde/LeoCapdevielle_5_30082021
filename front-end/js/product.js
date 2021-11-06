@@ -51,8 +51,8 @@ function createDetailedProduct(id) {
         }
       }
     })
-    .catch((err) => {
-      console.log("Erreur fonction createDetailedProduct()");
+    .catch((error) => {
+      console.error(error);
     });
 }
 

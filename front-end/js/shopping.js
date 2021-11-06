@@ -104,8 +104,8 @@ function createShoppingList() {
       </div>
       `;
     })
-    .catch((err) => {
-      console.log("Erreur fonction createShoppingList()");
+    .catch((error) => {
+      console.error(error);
     });
 }
 
@@ -131,6 +131,7 @@ validationButton.addEventListener('click', (event) => {
                   <label for="lastName">Nom :</label>
               </h6>
               <input class="w-100" type="text" id="lastName" name="lastName" required>
+              <span id="errorLastName"></span>
           </div>
           <div class="mt-3">
               <h6 class="text-secondary mb-0 text-start">
@@ -167,14 +168,48 @@ validationButton.addEventListener('click', (event) => {
       const confirmationButton = document.getElementById("validation_form");
       confirmationButton.addEventListener('submit', (event) => {
         event.preventDefault();
-        if (confirm("Êtes-vous sûr de vouloir valider la commande ?")) {
-        createContact();
-        sendCommand();
+        if (validationForm()) {
+          if (confirm("Êtes-vous sûr de vouloir valider la commande ?")) {
+            createContact();
+            sendCommand();
+          }
         }
       });
     }
   }
-})
+});
+
+// Validation du fomulaire
+
+function validationForm() {
+  let validationForm = document.forms["validation_form"];
+
+  if (validationForm["lastName"].value.length <= 2) {
+    alert("Le nom doit contenir au moins 3 caractères");
+    validationForm["lastName"].focus();
+    return false;
+  }
+
+  if (validationForm["firstName"].value.length <= 2) {
+    alert("Le prénom doit contenir au moins 3 caractères");
+    validationForm["firstName"].focus();
+    return false;
+  }
+
+  if (validationForm["address"].value.length <= 2) {
+    alert("L'addresse doit contenir au moins 3 caractères");
+    validationForm["address"].focus();
+    return false;
+  }
+
+  if (validationForm["city"].value.length <= 2) {
+    alert("La ville doit contenir au moins 3 caractères");
+    validationForm["city"].focus();
+    return false;
+  }
+
+  return true;
+}
 
 // Création de la méthode POST d'envoi de la commande  
 
@@ -195,8 +230,8 @@ function sendCommand() {
     localStorage.setItem("contact", JSON.stringify(contact));
     location.href = `validation.html?orderId=${data.orderId}`;
   })
-  .catch((err) => {
-    console.log("Erreur fonction sendCommand()");
+  .catch((error) => {
+    console.error(error);
   });
 }
 

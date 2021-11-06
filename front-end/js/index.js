@@ -37,8 +37,8 @@ function createProductList() {
           `;
       }
     })
-    .catch((err) => {
-      console.log("Erreur fonction creatProductList()");
+    .catch((error) => {
+      console.error(error);
     });
 }
 
